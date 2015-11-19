@@ -13,8 +13,8 @@ def start():
     """
     Good morning!
     Welcome to Python tips, tricks and dark magic
-    I'm Jordi Soucheiron and I work @ serverdensity, where we make an awesome
-    SaaS tool to monitor servers and websites
+    I'm Jordi Soucheiron and I work @ serverdensity (blog.serverdensity.com),
+    where we make an awesome SaaS tool to monitor servers and websites.
     Feel free to interrupt and ask anything during the talk
     You can reach me through:
       - @jordixou
