@@ -168,7 +168,7 @@ def slide_5():
     """
 
     a = 'rules!'
-    b = 'PyConEs'
+    b = 'PyConES'
 
     a, b = b, a
 
@@ -342,7 +342,7 @@ def print_func_result(func):
     print "--- Result start ---"
     result = func()
     if result is not None:
-        print "Return value: {}".format(result)
+        print "Return value: {0}".format(result)
     print "--- Result end ---"
 
 
