@@ -303,6 +303,8 @@ def questions():
     """ That's all I have for now.
     If you have any questions I'll be happy to answer them :)
 
+    Thanks to @itorres for the index code
+
     I based most of this talk from the stuff I got from here:
     http://www.siafoo.net/article/52
     https://docs.python.org/3/library/functions.html
@@ -318,7 +320,7 @@ def end():
 
 
 def pprint(value):
-    formated_value = highlight(
+    formatted_value = highlight(
         json.dumps(
             value,
             sort_keys=True,
@@ -328,7 +330,7 @@ def pprint(value):
         JsonLexer(),
         TerminalFormatter(bg='dark')
     )
-    print formated_value
+    print formatted_value
 
 
 def print_func(func):
@@ -344,6 +346,15 @@ def print_func_result(func):
     if result is not None:
         print "Return value: {0}".format(result)
     print "--- Result end ---"
+
+
+def index():
+    r = ""
+    for k in sorted(slides, key=slides.get):
+        doc = inspect.getdoc(slides[k][0])
+        if doc is not None and k.isdigit():
+            r += "{}: {}\n".format(k, doc.split('\n')[0])
+    return r
 
 
 if __name__ == "__main__":
@@ -395,9 +406,9 @@ if __name__ == "__main__":
                     print_func_result(func)
                     sys.stdin.readline()
             else:
-                print "Slide '{0}' not found. Available_slides: {1}".format(
+                print "Slide '{0}' not found. Available_slides:\n{1}".format(
                     user_input,
-                    sorted(slides.keys())
+                    index()
                 )
         except Exception:
             raise
