@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 import inspect
 import json
@@ -35,9 +35,9 @@ def slide_1():
         del my_dict[key]
 
     if key in my_dict:
-        print my_dict[key]
+        print(my_dict[key])
     else:
-        print "default value"
+        print("default value")
 
 
 def slide_1_1():
@@ -48,9 +48,9 @@ def slide_1_1():
         'my_key': 'my_value',
         'my_other_key': 'my_other_value'
     }
-    print my_dict.pop('my_key', "I don't care if it doesn't exist")
-    print my_dict.pop('my_key', "I don't care if it doesn't exist")
-    print my_dict.pop('my_key', "I don't care if it doesn't exist")
+    print(my_dict.pop('my_key', "I don't care if it doesn't exist"))
+    print(my_dict.pop('my_key', "I don't care if it doesn't exist"))
+    print(my_dict.pop('my_key', "I don't care if it doesn't exist"))
     pprint(my_dict)
 
 
@@ -62,9 +62,9 @@ def slide_1_2():
     my_dict = {
         'my_key': 'my_value'
     }
-    print my_dict.get('my_key', 'default value')
-    print my_dict.get('my_missing_key', 'default value')
-    print my_dict.get('my_missing_key')
+    print(my_dict.get('my_key', 'default value'))
+    print(my_dict.get('my_missing_key', 'default value'))
+    print(my_dict.get('my_missing_key'))
 
 
 def slide_2():
@@ -76,7 +76,7 @@ def slide_2_1():
     """ Negative indexes
     """
     my_list = [1, 2, 3, 4, 5]
-    print my_list[-1]
+    print(my_list[-1])
 
 
 def slide_2_2():
@@ -109,16 +109,16 @@ def slide_3():
     When concatenated, "or" will give back the last operand if all are False or
     the first True operand.
     """
-    print "---and---"
-    print True and False and None
-    print True and None and False
-    print True and 1 and 10 < 20
-    print True and 10 < 20 and 1
-    print "---or---"
-    print True or False or None
-    print 1 or None or False
-    print False or None or 0
-    print 0 or None or False
+    print("---and---")
+    print(True and False and None)
+    print(True and None and False)
+    print(True and 1 and 10 < 20)
+    print(True and 10 < 20 and 1)
+    print("---or---")
+    print(True or False or None)
+    print(1 or None or False)
+    print(False or None or 0)
+    print(0 or None or False)
 
 
 def my_wrong_append(value, my_list=[]):
@@ -172,7 +172,7 @@ def slide_5():
 
     a, b = b, a
 
-    print "{0} {1}".format(a, b)
+    print("{0} {1}".format(a, b))
 
 
 def slide_6():
@@ -199,12 +199,12 @@ def slide_6_1():
         try:
             raise KeyboardInterrupt()
         except Exception:
-            print "We won't print this"
+            print("We won't print this")
     except:
-        print "We won't catch the exception with Exception."
-        print "KeyboardInterrupt is not a subclass of Exception"
-        print "only non-system-exiting exceptions are."
-        print "But they are still exceptions and, therefore, can be captured"
+        print("We won't catch the exception with Exception.")
+        print("KeyboardInterrupt is not a subclass of Exception")
+        print("only non-system-exiting exceptions are.")
+        print("But they are still exceptions and, therefore, can be captured")
 
 
 def slide_6_2():
@@ -228,11 +228,11 @@ def slide_7():
     try:
         a = 0
     except ValueError:
-        print "The exception won't be raised"
+        print("The exception won't be raised")
     else:
-        print "We'll run the code in else if the exception is not raised"
+        print("We'll run the code in else if the exception is not raised")
     finally:
-        print "and we'll always run finally (great for cleanup code)"
+        print("and we'll always run finally (great for cleanup code)")
 
 
 def slide_7_1():
@@ -242,25 +242,25 @@ def slide_7_1():
     try:
         a = 0
     except ValueError:
-        print "The exception won't be raised"
+        print("The exception won't be raised")
     else:
-        print "We'll run the code in else if the exception is not raised"
+        print("We'll run the code in else if the exception is not raised")
         return 1
     finally:
-        print "and we'll always run finally even avoiding return calls"
+        print("and we'll always run finally even avoiding return calls")
         print
         return 2
 
 
 def print_point(x, y):
-    print "({0}, {1})".format(x, y)
+    print("({0}, {1})".format(x, y))
 
 
 def slide_8():
     """ Other unpacking tricks:
     We have this helper function:
 def print_point(x, y):
-    print "({0}, {1})".format(x, y)
+    print("({0}, {1})".format(x, y))
     """
 
     point_a = (3, 4)
@@ -288,8 +288,8 @@ def slide_9():
 
     x = 15
     y = 2 * x
-    print 10 < x < 20 < y < 50
-    print 20 < x > 10
+    print(10 < x < 20 < y < 50)
+    print(20 < x > 10)
 
 
 def slide_10():
@@ -330,22 +330,22 @@ def pprint(value):
         JsonLexer(),
         TerminalFormatter(bg='dark')
     )
-    print formatted_value
+    print(formatted_value)
 
 
 def print_func(func):
-    print "--- Code start ---"
+    print("--- Code start ---")
     code = "".join(inspect.getsourcelines(func)[0])
-    print highlight(code, PythonLexer(), TerminalFormatter(bg='dark'))
-    print "--- Code end ---"
+    print(highlight(code, PythonLexer(), TerminalFormatter(bg='dark')))
+    print("--- Code end ---")
 
 
 def print_func_result(func):
-    print "--- Result start ---"
+    print("--- Result start ---")
     result = func()
     if result is not None:
-        print "Return value: {0}".format(result)
-    print "--- Result end ---"
+        print("Return value: {0}".format(result))
+    print("--- Result end ---")
 
 
 def index():
@@ -388,7 +388,7 @@ if __name__ == "__main__":
     }
     while True:
         try:
-            print "Slide({0}):".format(next_slide)
+            print("Slide({0}):".format(next_slide))
             user_input = sys.stdin.readline().strip('\n')
             if user_input == '':
                 user_input = next_slide
@@ -406,10 +406,10 @@ if __name__ == "__main__":
                     print_func_result(func)
                     sys.stdin.readline()
             else:
-                print "Slide '{0}' not found. Available_slides:\n{1}".format(
+                print("Slide '{0}' not found. Available_slides:\n{1}".format(
                     user_input,
                     index()
-                )
+                ))
         except Exception:
             raise
         except:
