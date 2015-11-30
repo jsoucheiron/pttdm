@@ -295,7 +295,9 @@ def slide_9():
 def slide_10():
     """In order to start a web file server on
     the current directory, simply run:
-    python -m SimpleHTTPServer 5000
+    python2.7 -m SimpleHTTPServer 5000
+    or
+    python3 -m http.server 5000
     """
 
 
