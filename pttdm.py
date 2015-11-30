@@ -3,12 +3,70 @@
 import inspect
 import json
 import sys
+from functools import wraps
 from pygments import highlight
 from pygments.lexers import PythonLexer
 from pygments.lexers.data import JsonLexer
 from pygments.formatters import TerminalFormatter
 
 
+def pprint(value):
+    formatted_value = highlight(
+        json.dumps(
+            value,
+            sort_keys=True,
+            indent=4,
+            separators=(',', ': ')
+        ),
+        JsonLexer(),
+        TerminalFormatter(bg='dark')
+    )
+    print(formatted_value)
+
+
+def print_func(func):
+    print("--- Code start ---")
+    code = "".join(inspect.getsourcelines(func)[0][1:])
+    print(highlight(code, PythonLexer(), TerminalFormatter(bg='dark')))
+    print("--- Code end ---")
+
+
+def print_func_result(func):
+    print("--- Result start ---")
+    result = func()
+    if result is not None:
+        print("Return value: {0}".format(result))
+    print("--- Result end ---")
+
+
+def index():
+    r = ""
+    for k in sorted(slides, key=slides.get):
+        doc = inspect.getdoc(slides[k][0])
+        if doc is not None and k.isdigit():
+            r += "{}: {}\n".format(k, doc.split('\n')[0])
+    return r
+
+
+def slide(*args, **kwargs):
+    def wrap(f):
+        def wrapped_f():
+            print_func(f)
+            sys.stdin.readline()
+            if kwargs.get('executable', False):
+                print_func_result(f)
+                sys.stdin.readline()
+        return wrapped_f
+    if len(args) == 1 and callable(args[0]):
+        # No arguments, this is the decorator
+        # Set default values for the arguments
+        return wrap(args[0])
+    else:
+        # This is just returning the decorator
+        return wrap
+
+
+@slide
 def start():
     """
     Good morning!
@@ -25,6 +83,7 @@ def start():
     """
 
 
+@slide(executable=True)
 def slide_1():
     """ Working with dictionaries
     """
@@ -40,6 +99,7 @@ def slide_1():
         print("default value")
 
 
+@slide(executable=True)
 def slide_1_1():
     """ Use pop to simplify key deletion. Just remember to add a default value
     to avoid KeyExceptions
@@ -54,6 +114,7 @@ def slide_1_1():
     pprint(my_dict)
 
 
+@slide(executable=True)
 def slide_1_2():
     """ Dictionaries have a get method. This method let's you use a optional d
     parameter with a default value of None. If you set d, if the key doesn't
@@ -67,11 +128,13 @@ def slide_1_2():
     print(my_dict.get('my_missing_key'))
 
 
+@slide
 def slide_2():
     """ Let's talk about lists
     """
 
 
+@slide(executable=True)
 def slide_2_1():
     """ Negative indexes
     """
@@ -79,6 +142,7 @@ def slide_2_1():
     print(my_list[-1])
 
 
+@slide(executable=True)
 def slide_2_2():
     """ List slicing
     """
@@ -91,6 +155,7 @@ def slide_2_2():
     pprint(my_list[::-1])
 
 
+@slide(executable=True)
 def slide_2_3():
     """ List zipping
     """
@@ -100,6 +165,7 @@ def slide_2_3():
     pprint(dict(zip(my_list_1, my_list_2)))
 
 
+@slide(executable=True)
 def slide_3():
     """ Advanced "and" and "or" usage.
 
@@ -132,6 +198,7 @@ def my_append(value, my_list=None):
     return my_list
 
 
+@slide(executable=True)
 def slide_4():
     """ Default arguments are only evaluated once
     Assume we have this method (we do):
@@ -147,6 +214,7 @@ def my_wrong_append(value, my_list=[]):
     pprint(my_wrong_append(2))
 
 
+@slide(executable=True)
 def slide_4_1():
     """ So... unless you're doing it on purpose
     We can take advantage of "or" and do this:
@@ -163,6 +231,7 @@ def my_append(value, my_list=None):
     pprint(my_append(2))
 
 
+@slide(executable=True)
 def slide_5():
     """ Unpacking
     """
@@ -175,6 +244,7 @@ def slide_5():
     print("{0} {1}".format(a, b))
 
 
+@slide(executable=True)
 def slide_6():
     """ Exceptions
 
@@ -194,6 +264,7 @@ def slide_6():
         pass
 
 
+@slide(executable=True)
 def slide_6_1():
     try:
         try:
@@ -207,6 +278,7 @@ def slide_6_1():
         print("But they are still exceptions and, therefore, can be captured")
 
 
+@slide
 def slide_6_2():
     """ Exceptions follow the following hierarchy:
     BaseException
@@ -221,6 +293,7 @@ def slide_6_2():
     """
 
 
+@slide(executable=True)
 def slide_7():
     """ Full try/except/else/finally flow
     """
@@ -235,6 +308,7 @@ def slide_7():
         print("and we'll always run finally (great for cleanup code)")
 
 
+@slide(executable=True)
 def slide_7_1():
     """ Weird try/except/else/finally flow considerations
     """
@@ -256,6 +330,7 @@ def print_point(x, y):
     print("({0}, {1})".format(x, y))
 
 
+@slide(executable=True)
 def slide_8():
     """ Other unpacking tricks:
     We have this helper function:
@@ -271,6 +346,7 @@ def print_point(x, y):
     print_point(**point_b)
 
 
+@slide
 def slide_8_1():
     """ The most usual place where this is used is in functions overwritten in
     child classes:
@@ -282,6 +358,7 @@ def slide_8_1():
     """
 
 
+@slide(executable=True)
 def slide_9():
     """ Chaining comparisons
     """
@@ -292,13 +369,16 @@ def slide_9():
     print(20 < x > 10)
 
 
+@slide
 def slide_10():
     """In order to start a web file server on
     the current directory, simply run:
-    python -m SimpleHTTPServer 5000
+    python2.7 -m SimpleHTTPServer 5000
+    or
+    python3 -m http.server 5000
     """
 
-
+@slide
 def questions():
     """ That's all I have for now.
     If you have any questions I'll be happy to answer them :)
@@ -314,77 +394,40 @@ def questions():
     """
 
 
+@slide
 def end():
     """ Thank you all!!!
     """
 
 
-def pprint(value):
-    formatted_value = highlight(
-        json.dumps(
-            value,
-            sort_keys=True,
-            indent=4,
-            separators=(',', ': ')
-        ),
-        JsonLexer(),
-        TerminalFormatter(bg='dark')
-    )
-    print(formatted_value)
-
-
-def print_func(func):
-    print("--- Code start ---")
-    code = "".join(inspect.getsourcelines(func)[0])
-    print(highlight(code, PythonLexer(), TerminalFormatter(bg='dark')))
-    print("--- Code end ---")
-
-
-def print_func_result(func):
-    print("--- Result start ---")
-    result = func()
-    if result is not None:
-        print("Return value: {0}".format(result))
-    print("--- Result end ---")
-
-
-def index():
-    r = ""
-    for k in sorted(slides, key=slides.get):
-        doc = inspect.getdoc(slides[k][0])
-        if doc is not None and k.isdigit():
-            r += "{}: {}\n".format(k, doc.split('\n')[0])
-    return r
-
-
 if __name__ == "__main__":
     next_slide = 'start'
     slides = {
-        'start': (start, '1', False),
-        '1': (slide_1, '1.1', True),
-        '1.1': (slide_1_1, '1.2', True),
-        '1.2': (slide_1_2, '2', True),
-        '2': (slide_2, '2.1', False),
-        '2.1': (slide_2_1, '2.2', True),
-        '2.2': (slide_2_2, '2.3', True),
-        '2.3': (slide_2_3, '3', True),
-        '3': (slide_3, '4', True),
-        '4': (slide_4, '4.1', True),
-        '4.1': (slide_4_1, '5', True),
-        '5': (slide_5, '6', True),
-        '6': (slide_6, '6.1', False),
-        '6.1': (slide_6_1, '6.2', False),
-        '6.2': (slide_6_2, '7', True),
-        '7': (slide_7, '7.1', True),
-        '7.1': (slide_7_1, '8', True),
-        '8': (slide_8, '8.1', True),
-        '8.1': (slide_8_1, '9', False),
-        '9': (slide_9, '10', True),
-        '10': (slide_10, 'questions', False),
-        'questions': (questions, 'end', False),
-        'end': (end, 'exit', False),
-        'exit': (exit, None, False),
-        '0': (exit, None, False)
+        'start': (start, '1'),
+        '1': (slide_1, '1.1'),
+        '1.1': (slide_1_1, '1.2'),
+        '1.2': (slide_1_2, '2'),
+        '2': (slide_2, '2.1'),
+        '2.1': (slide_2_1, '2.2'),
+        '2.2': (slide_2_2, '2.3'),
+        '2.3': (slide_2_3, '3'),
+        '3': (slide_3, '4'),
+        '4': (slide_4, '4.1'),
+        '4.1': (slide_4_1, '5'),
+        '5': (slide_5, '6'),
+        '6': (slide_6, '6.1'),
+        '6.1': (slide_6_1, '6.2'),
+        '6.2': (slide_6_2, '7'),
+        '7': (slide_7, '7.1'),
+        '7.1': (slide_7_1, '8'),
+        '8': (slide_8, '8.1'),
+        '8.1': (slide_8_1, '9'),
+        '9': (slide_9, '10'),
+        '10': (slide_10, 'questions'),
+        'questions': (questions, 'end'),
+        'end': (end, 'exit'),
+        'exit': (exit, None),
+        '0': (exit, None)
     }
     while True:
         try:
@@ -393,18 +436,14 @@ if __name__ == "__main__":
             if user_input == '':
                 user_input = next_slide
 
-            func, next_slide, run = slides.get(
+            func, next_slide = slides.get(
                 user_input,
-                (None, next_slide, False)
+                (None, next_slide)
             )
             if func is exit:
                 sys.exit(0)
             elif func is not None:
-                print_func(func)
-                sys.stdin.readline()
-                if run:
-                    print_func_result(func)
-                    sys.stdin.readline()
+                func()
             else:
                 print("Slide '{0}' not found. Available_slides:\n{1}".format(
                     user_input,
