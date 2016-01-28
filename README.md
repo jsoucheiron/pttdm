@@ -1,7 +1,7 @@
 Description
 ===========
 
-Source code from the talk 'Python tips, tricks and dark magic' @pycones 2015/11/21
+Source code from the talk 'Python tips, tricks and dark magic' @FOSDEM 2016/01/30
 
 Installation
 ============
