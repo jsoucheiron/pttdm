@@ -39,17 +39,9 @@ def print_func_result(func):
     print("--- Result end ---")
 
 
-def index():
-    r = ""
-    for k in sorted(slides, key=slides.get):
-        doc = inspect.getdoc(slides[k][0])
-        if doc is not None and k.isdigit():
-            r += "{}: {}\n".format(k, doc.split('\n')[0])
-    return r
-
-
 def slide(*args, **kwargs):
     def wrap(f):
+        @wraps(f)
         def wrapped_f():
             print_func(f)
             sys.stdin.readline()
@@ -71,20 +63,20 @@ def start():
     """
     Good morning!
     Welcome to Python tips, tricks and dark magic
-    I'm Jordi Soucheiron and I work @ serverdensity (blog.serverdensity.com),
-    where we make an awesome SaaS tool to monitor servers and websites.
+    I'm Jordi Soucheiron and I work @ serverdensity (www.serverdensity.com),
+    We make an awesome SaaS tool to monitor servers and websites.
     Feel free to interrupt and ask anything during the talk
     You can reach me through:
       - @jordixou
       - jordi@soucheiron.cat
 
     You can download (and execute) this presentation from here:
-    https://github.com/jsoucheiron/pycones-pttdm/
+    https://github.com/jsoucheiron/pttdm/
     """
 
 
 @slide(executable=True)
-def slide_1():
+def dictionaries_1():
     """ Working with dictionaries
     """
     my_dict = {'my_key': 'my_value'}
@@ -100,7 +92,7 @@ def slide_1():
 
 
 @slide(executable=True)
-def slide_1_1():
+def dictionaries_2():
     """ Use pop to simplify key deletion. Just remember to add a default value
     to avoid KeyExceptions
     """
@@ -115,7 +107,7 @@ def slide_1_1():
 
 
 @slide(executable=True)
-def slide_1_2():
+def dictionaries_3():
     """ Dictionaries have a get method. This method let's you use a optional d
     parameter with a default value of None. If you set d, if the key doesn't
     exist you'll get d.
@@ -128,14 +120,8 @@ def slide_1_2():
     print(my_dict.get('my_missing_key'))
 
 
-@slide
-def slide_2():
-    """ Let's talk about lists
-    """
-
-
 @slide(executable=True)
-def slide_2_1():
+def lists_1():
     """ Negative indexes
     """
     my_list = [1, 2, 3, 4, 5]
@@ -143,7 +129,7 @@ def slide_2_1():
 
 
 @slide(executable=True)
-def slide_2_2():
+def lists_2():
     """ List slicing
     """
     my_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -156,7 +142,7 @@ def slide_2_2():
 
 
 @slide(executable=True)
-def slide_2_3():
+def lists_3():
     """ List zipping
     """
     my_list_1 = ['a', 'b', 'c', 'd', 'e']
@@ -166,7 +152,7 @@ def slide_2_3():
 
 
 @slide(executable=True)
-def slide_3():
+def and_or():
     """ Advanced "and" and "or" usage.
 
     When concatenated, "and" will give back the value
@@ -199,7 +185,7 @@ def my_append(value, my_list=None):
 
 
 @slide(executable=True)
-def slide_4():
+def default_arguments_1():
     """ Default arguments are only evaluated once
     Assume we have this method (we do):
 
@@ -215,7 +201,7 @@ def my_wrong_append(value, my_list=[]):
 
 
 @slide(executable=True)
-def slide_4_1():
+def default_arguments_2():
     """ So... unless you're doing it on purpose
     We can take advantage of "or" and do this:
 
@@ -232,12 +218,12 @@ def my_append(value, my_list=None):
 
 
 @slide(executable=True)
-def slide_5():
+def unpacking_1():
     """ Unpacking
     """
 
     a = 'rules!'
-    b = 'PyConES'
+    b = 'FOSDEM'
 
     a, b = b, a
 
@@ -245,7 +231,35 @@ def slide_5():
 
 
 @slide(executable=True)
-def slide_6():
+def unpacking_2():
+    """ Other unpacking tricks:
+    We have this helper function:
+def print_point(x, y):
+    print("({0}, {1})".format(x, y))
+    """
+
+    point_a = (3, 4)
+    point_b = {'y': 4, 'x': 3}
+
+    print_point(3, 4)
+    print_point(*point_a)
+    print_point(**point_b)
+
+
+@slide
+def unpacking_3():
+    """ The most usual place where this is used is in functions overwritten in
+    child classes:
+
+    def __init__(self, *args, **kwargs):
+        super(MyClass, self).__init__(*args, **kwargs)
+        ...
+
+    """
+
+
+@slide(executable=True)
+def exceptions_1():
     """ Exceptions
 
     Disclamer: DON'T EVER DO THIS. Unless:
@@ -265,7 +279,7 @@ def slide_6():
 
 
 @slide(executable=True)
-def slide_6_1():
+def exceptions_2():
     try:
         try:
             raise KeyboardInterrupt()
@@ -279,7 +293,7 @@ def slide_6_1():
 
 
 @slide
-def slide_6_2():
+def exceptions_3():
     """ Exceptions follow the following hierarchy:
     BaseException
      +-- SystemExit
@@ -294,7 +308,7 @@ def slide_6_2():
 
 
 @slide(executable=True)
-def slide_7():
+def flow_control_1():
     """ Full try/except/else/finally flow
     """
 
@@ -309,7 +323,7 @@ def slide_7():
 
 
 @slide(executable=True)
-def slide_7_1():
+def flow_control_2():
     """ Weird try/except/else/finally flow considerations
     """
 
@@ -331,35 +345,7 @@ def print_point(x, y):
 
 
 @slide(executable=True)
-def slide_8():
-    """ Other unpacking tricks:
-    We have this helper function:
-def print_point(x, y):
-    print("({0}, {1})".format(x, y))
-    """
-
-    point_a = (3, 4)
-    point_b = {'y': 4, 'x': 3}
-
-    print_point(3, 4)
-    print_point(*point_a)
-    print_point(**point_b)
-
-
-@slide
-def slide_8_1():
-    """ The most usual place where this is used is in functions overwritten in
-    child classes:
-
-    def __init__(self, *args, **kwargs):
-        super(MyClass, self).__init__(*args, **kwargs)
-        ...
-
-    """
-
-
-@slide(executable=True)
-def slide_9():
+def chaining_comparisons():
     """ Chaining comparisons
     """
 
@@ -370,7 +356,7 @@ def slide_9():
 
 
 @slide
-def slide_10():
+def web_server():
     """In order to start a web file server on
     the current directory, simply run:
     python2.7 -m SimpleHTTPServer 5000
@@ -397,38 +383,53 @@ def questions():
 @slide
 def end():
     """ Thank you all!!!
+    You can download the code at https://github.com/jsoucheiron/pttdm
+    and you can send any questions to @jordixou
     """
+
+slides = {
+    'start': (start, '1.1'),
+    '1.1': (dictionaries_1, '1.2'),
+    '1.2': (dictionaries_2, '1.3'),
+    '1.3': (dictionaries_3, '2.1'),
+    '2.1': (lists_1, '2.2'),
+    '2.2': (lists_2, '2.3'),
+    '2.3': (lists_3, '3'),
+    '3': (and_or, '4.1'),
+    '4.1': (default_arguments_1, '4.2'),
+    '4.2': (default_arguments_2, '5.1'),
+    '5.1': (unpacking_1, '5.2'),
+    '5.2': (unpacking_2, '5.3'),
+    '5.3': (unpacking_3, '6.1'),
+    '6.1': (exceptions_1, '6.2'),
+    '6.2': (exceptions_2, '6.3'),
+    '6.3': (exceptions_3, '7.1'),
+    '7.1': (flow_control_1, '7.2'),
+    '7.2': (flow_control_2, '8'),
+    '8': (chaining_comparisons, '9'),
+    '9': (web_server, '10'),
+    '10': (questions, '11'),
+    '11': (end, 'exit'),
+    'exit': (exit, None),
+    '0': (exit, None)
+}
+
+
+def index():
+    r = ""
+    names = []
+    keys = slides.keys()
+    for k in sorted(keys):
+        if hasattr(slides[k][0], '__name__'):
+            names.append('{} ({})'.format(
+                slides[k][0].__name__,
+                k
+            ))
+    return '\n'.join(names)
 
 
 if __name__ == "__main__":
     next_slide = 'start'
-    slides = {
-        'start': (start, '1'),
-        '1': (slide_1, '1.1'),
-        '1.1': (slide_1_1, '1.2'),
-        '1.2': (slide_1_2, '2'),
-        '2': (slide_2, '2.1'),
-        '2.1': (slide_2_1, '2.2'),
-        '2.2': (slide_2_2, '2.3'),
-        '2.3': (slide_2_3, '3'),
-        '3': (slide_3, '4'),
-        '4': (slide_4, '4.1'),
-        '4.1': (slide_4_1, '5'),
-        '5': (slide_5, '6'),
-        '6': (slide_6, '6.1'),
-        '6.1': (slide_6_1, '6.2'),
-        '6.2': (slide_6_2, '7'),
-        '7': (slide_7, '7.1'),
-        '7.1': (slide_7_1, '8'),
-        '8': (slide_8, '8.1'),
-        '8.1': (slide_8_1, '9'),
-        '9': (slide_9, '10'),
-        '10': (slide_10, 'questions'),
-        'questions': (questions, 'end'),
-        'end': (end, 'exit'),
-        'exit': (exit, None),
-        '0': (exit, None)
-    }
     while True:
         try:
             print("Slide({0}):".format(next_slide))
